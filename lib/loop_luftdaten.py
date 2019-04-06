@@ -73,9 +73,9 @@ def loop_luftdaten(CZAS):
                     LOGGER.debug(
                         "luftdaten calculated values, "
                         "Returned value from sensors: %s, "
-                        "PM10 points procentage %s, "
+                        "PM10 points percentage %s, "
                         "Returned value from PM2.5: %s, "
-                        "PM2.5 points procentage %s",
+                        "PM2.5 points percentage %s",
                         returned_value_from_pm10_luftdaten,
                         pm10_points_percentage_luftdaten,
                         returned_value_from_pm25_luftdaten,

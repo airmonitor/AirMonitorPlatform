@@ -1,12 +1,11 @@
 # coding=utf-8
 
-import json
+
 import os
-import urllib
-from urllib.request import Request
 
 import htmlmin
 from lib.html_templates import HtmlTemplates
+from looko2 import all_data
 import urllib3
 
 from lib.airmonitor_common_libs import logger_initialization
@@ -17,23 +16,6 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 LOGGER = logger_initialization()
 LOG_LEVEL = os.environ["LOG_LEVEL"]
 LOOK_TOKEN = os.environ["LOOK_TOKEN"]
-
-
-def all_data():
-    url = f"http://api.looko2.com/?method=GetAll&token={LOOK_TOKEN}"
-
-    if url.lower().startswith("http"):
-        looko2 = Request(url)
-    else:
-        raise ValueError from None
-
-    try:
-        resp = urllib.request.urlopen(looko2, timeout=60)
-        looko2_all_stations = json.loads(resp.read())
-    except ValueError:
-        looko2_all_stations = None
-
-    return looko2_all_stations
 
 
 def loop_looko2(czas):
