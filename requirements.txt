@@ -1,12 +1,12 @@
 folium
 branca
-gspread==0.6.2
+gspread
 influxdb==5.2.0
-oauth2client==4.1.2
+oauth2client
 paho-mqtt==1.4.0
-requests==2.20.0
-urllib3==1.24.1
-htmlmin==0.1.12
+requests==2.21.0
+urllib3==1.25
+htmlmin
 pytz
 flake8
 pylint

@@ -30,7 +30,7 @@ def logger_initialization():
 
 # Google Docs
 def get_spreadsheet_data():
-    scope = ['https://spreadsheets.google.com/feeds']
+    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     credentials = ServiceAccountCredentials.from_json_keyfile_name(KEY_FILE_PATH, scope)
     file = gspread.authorize(credentials)  # authenticate with Google
     sheet = file.open(GOOGLE_SPREADSHEET_NAME).sheet1
