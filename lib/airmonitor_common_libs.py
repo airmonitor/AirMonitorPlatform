@@ -19,7 +19,7 @@ KEY_FILE_PATH = os.environ["KEY_FILE_PATH"]
 
 def logger_initialization():
     logger = logging.getLogger(__name__)
-    formatter = logging.Formatter(f'%(name)s %(asctime)s %(levelname)s %(message)s')
+    formatter = logging.Formatter(f"%(name)s %(asctime)s %(levelname)s %(message)s")
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
@@ -30,7 +30,7 @@ def logger_initialization():
 
 # Google Docs
 def get_spreadsheet_data():
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     credentials = ServiceAccountCredentials.from_json_keyfile_name(KEY_FILE_PATH, scope)
     file = gspread.authorize(credentials)  # authenticate with Google
     sheet = file.open(GOOGLE_SPREADSHEET_NAME).sheet1

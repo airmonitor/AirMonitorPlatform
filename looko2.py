@@ -61,9 +61,7 @@ def looko2(event, context):
     LOGGER.debug("result_longitude %s", result_longitude)
     LOGGER.debug("result_epoch %s", result_epoch)
 
-    merged_ids_lat_long = list(
-        zip(result_ids, result_latitude, result_longitude, result_epoch)
-    )
+    merged_ids_lat_long = list(zip(result_ids, result_latitude, result_longitude, result_epoch))
 
     LOGGER.debug("merged_ids_lat_long %s", merged_ids_lat_long)
 
@@ -76,9 +74,7 @@ def looko2(event, context):
     for values in merged_ids_lat_long:
         LOGGER.debug("values %s", values)
 
-        sensor_url = Request(
-            f"http://api.looko2.com/?method=GetLOOKO&id={values[0]}&token={LOOK_TOKEN}"
-        )
+        sensor_url = Request(f"http://api.looko2.com/?method=GetLOOKO&id={values[0]}&token={LOOK_TOKEN}")
 
         try:
             looko2_sensor_data = urllib.request.urlopen(sensor_url)
@@ -88,11 +84,7 @@ def looko2(event, context):
 
         LOGGER.debug("looko2_sensor_data %s", looko2_sensor_data)
 
-        if (
-                looko2_sensor_data != 0
-                and (55 > float(values[1]) > 47)
-                and (epoch_time - 7200) < float(values[3])
-        ):
+        if looko2_sensor_data != 0 and (55 > float(values[1]) > 47) and (epoch_time - 7200) < float(values[3]):
             try:
                 looko2_sensor_data_pm1 = looko2_sensor_data["PM1"]
                 LOGGER.debug("PM1:  %s", looko2_sensor_data_pm1)
@@ -120,9 +112,7 @@ def looko2(event, context):
             value_pm25.append(float(looko2_sensor_data_pm25))
             value_pm10.append(float(looko2_sensor_data_pm10))
 
-    all_entries_for_json_upload = list(
-        zip(lat, long, value_pm25, value_pm10, value_pm01)
-    )
+    all_entries_for_json_upload = list(zip(lat, long, value_pm25, value_pm10, value_pm01))
 
     LOGGER.debug("all_entries_for_json_upload  %s", all_entries_for_json_upload)
 

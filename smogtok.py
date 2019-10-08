@@ -20,9 +20,7 @@ def all_data():
     """
     if SMOGTOK_URL.lower().startswith("http" or "https"):
         response = requests.get(
-            url=SMOGTOK_URL,
-            timeout=30,
-            auth=requests.auth.HTTPBasicAuth(SMOGTOK_LOGIN, SMOGTOK_PASSWORD),
+            url=SMOGTOK_URL, timeout=30, auth=requests.auth.HTTPBasicAuth(SMOGTOK_LOGIN, SMOGTOK_PASSWORD)
         )
 
     else:
@@ -92,10 +90,7 @@ def smogtok(event, context):
 
             final_list_of_measurements_in_dictionary.append(data)
 
-        LOGGER.debug(
-            "SMOGTOK final_list_of_measurements_in_dictionary %s",
-            final_list_of_measurements_in_dictionary,
-        )
+        LOGGER.debug("SMOGTOK final_list_of_measurements_in_dictionary %s", final_list_of_measurements_in_dictionary)
 
     _send_data_to_api(final_list_of_measurements_in_dictionary)
 

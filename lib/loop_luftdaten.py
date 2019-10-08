@@ -1,13 +1,13 @@
 # coding=utf-8
 
 import htmlmin
-from lib.html_templates import HtmlTemplates
-from luftdaten import all_data
 import urllib3
 
 from lib.airmonitor_common_libs import logger_initialization
+from lib.html_templates import HtmlTemplates
 from lib.points_value import map_pins, pins, points_value
 from lib.query import query
+from luftdaten import all_data
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 LOGGER = logger_initialization()
@@ -39,18 +39,14 @@ def loop_luftdaten(CZAS):
         LOGGER.debug("luftdaten merged lat, long %s", merged_ids_lat_long_luftdaten)
 
         for row_luftdaten in merged_ids_lat_long_luftdaten:
-            pm10_points_value_luftdaten = query(
-                "pm10", row_luftdaten[0], row_luftdaten[1]
-            )
+            pm10_points_value_luftdaten = query("pm10", row_luftdaten[0], row_luftdaten[1])
             pm10_points_value_luftdaten = points_value(pm10_points_value_luftdaten)
 
             try:
                 if float(pm10_points_value_luftdaten) != 0:
                     LOGGER.debug("luftdaten PM10: %s", pm10_points_value_luftdaten)
                     pass
-                pm25_points_value_luftdaten = query(
-                    "pm25", row_luftdaten[0], row_luftdaten[1]
-                )
+                pm25_points_value_luftdaten = query("pm25", row_luftdaten[0], row_luftdaten[1])
                 pm25_points_value_luftdaten = points_value(pm25_points_value_luftdaten)
 
                 if float(pm25_points_value_luftdaten) != 0:
@@ -58,18 +54,12 @@ def loop_luftdaten(CZAS):
                     pass
 
                 returned_value_from_pm10_luftdaten = float(pm10_points_value_luftdaten)
-                pm10_points_percentage_luftdaten = (
-                        float(pm10_points_value_luftdaten) * 2
-                )
+                pm10_points_percentage_luftdaten = float(pm10_points_value_luftdaten) * 2
 
                 returned_value_from_pm25_luftdaten = float(pm25_points_value_luftdaten)
-                pm25_points_percentage_luftdaten = (
-                        float(pm25_points_value_luftdaten) * 4
-                )
+                pm25_points_percentage_luftdaten = float(pm25_points_value_luftdaten) * 4
 
-                if (returned_value_from_pm10_luftdaten != 0) or (
-                        returned_value_from_pm25_luftdaten != 0
-                ):
+                if (returned_value_from_pm10_luftdaten != 0) or (returned_value_from_pm25_luftdaten != 0):
                     LOGGER.debug(
                         "luftdaten calculated values, "
                         "Returned value from sensors: %s, "
@@ -84,16 +74,9 @@ def loop_luftdaten(CZAS):
 
                     font_colour_pm10 = pins(pm10_points_percentage_luftdaten)
                     font_colour_pm25 = pins(pm25_points_percentage_luftdaten)
-                    LOGGER.debug(
-                        "font_colour_pm10: %s, font_colour_pm25 %s",
-                        font_colour_pm10,
-                        font_colour_pm25,
-                    )
+                    LOGGER.debug("font_colour_pm10: %s, font_colour_pm25 %s", font_colour_pm10, font_colour_pm25)
 
-                    map_icon_colour = map_pins(
-                        pm10_points_percentage_luftdaten,
-                        pm25_points_percentage_luftdaten,
-                    )
+                    map_icon_colour = map_pins(pm10_points_percentage_luftdaten, pm25_points_percentage_luftdaten)
                     icon = map_icon_colour[0]
                     icon_colour = map_icon_colour[1]
                     LOGGER.debug("icon: %s, icon_colour %s", icon, icon_colour)
@@ -120,9 +103,7 @@ def loop_luftdaten(CZAS):
                         returned_value_from_custom_sensors_pm25=pm25_points,
                         particle_sensor="SDS011",
                     )
-                    html_luftdaten = htmlmin.minify(
-                        html_luftdaten, remove_comments=True, remove_empty_space=True
-                    )
+                    html_luftdaten = htmlmin.minify(html_luftdaten, remove_comments=True, remove_empty_space=True)
 
                     single_values = (lat, long, icon, icon_colour, html_luftdaten)
 

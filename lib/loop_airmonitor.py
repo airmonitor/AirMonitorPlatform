@@ -5,7 +5,8 @@ import os
 import htmlmin
 import urllib3
 
-from lib.airmonitor_common_libs import _data_from_google_docs, logger_initialization
+from lib.airmonitor_common_libs import (_data_from_google_docs,
+                                        logger_initialization)
 from lib.html_templates import HtmlTemplates
 from lib.points_value import map_pins, pins, points_value
 from lib.query import query
@@ -31,21 +32,15 @@ def loop_air_monitor_community(CZAS):
 
         try:
             pm10_points_value_custom_senors_pm_only = query("pm10", lat, long)
-            pm10_points_value_custom_senors_pm_only = points_value(
-                pm10_points_value_custom_senors_pm_only
-            )
+            pm10_points_value_custom_senors_pm_only = points_value(pm10_points_value_custom_senors_pm_only)
             LOGGER.debug("PM10: %s", pm10_points_value_custom_senors_pm_only)
 
             pm25_points_value_custom_senors_pm_only = query("pm25", lat, long)
-            pm25_points_value_custom_senors_pm_only = points_value(
-                pm25_points_value_custom_senors_pm_only
-            )
+            pm25_points_value_custom_senors_pm_only = points_value(pm25_points_value_custom_senors_pm_only)
             LOGGER.debug("PM25: %s", pm25_points_value_custom_senors_pm_only)
 
             pm1_points_value_custom_senors_pm_only = query("pm1", lat, long)
-            pm1_points_value_custom_senors_pm_only = points_value(
-                pm1_points_value_custom_senors_pm_only
-            )
+            pm1_points_value_custom_senors_pm_only = points_value(pm1_points_value_custom_senors_pm_only)
             LOGGER.debug("PM1: %s", pm1_points_value_custom_senors_pm_only)
 
             temperature_points_value = query("temperature", lat, long)
@@ -72,14 +67,11 @@ def loop_air_monitor_community(CZAS):
                 returned_value_from_custom_sensors_pm10_custom_senors_pm_only = float(
                     pm10_points_value_custom_senors_pm_only
                 )
-                pm10_points_percentage_custom_senors_pm_only = (
-                        float(pm10_points_value_custom_senors_pm_only) * 2
-                )
+                pm10_points_percentage_custom_senors_pm_only = float(pm10_points_value_custom_senors_pm_only) * 2
                 font_colour_pm10 = pins(pm10_points_percentage_custom_senors_pm_only)
 
                 LOGGER.debug(
-                    "pm10_points_percentage_custom_senors_pm_only: %s",
-                    pm10_points_percentage_custom_senors_pm_only,
+                    "pm10_points_percentage_custom_senors_pm_only: %s", pm10_points_percentage_custom_senors_pm_only
                 )
                 LOGGER.debug("font_colour_pm10: %s", font_colour_pm10)
                 LOGGER.debug(
@@ -91,14 +83,11 @@ def loop_air_monitor_community(CZAS):
                 returned_value_from_custom_sensors_pm25_custom_senors_pm_only = float(
                     pm25_points_value_custom_senors_pm_only
                 )
-                pm25_points_percentage_custom_senors_pm_only = (
-                        float(pm25_points_value_custom_senors_pm_only) * 4
-                )
+                pm25_points_percentage_custom_senors_pm_only = float(pm25_points_value_custom_senors_pm_only) * 4
                 font_colour_pm25 = pins(pm25_points_percentage_custom_senors_pm_only)
 
                 LOGGER.debug(
-                    "pm25_points_percentage_custom_senors_pm_only: %s",
-                    pm25_points_percentage_custom_senors_pm_only,
+                    "pm25_points_percentage_custom_senors_pm_only: %s", pm25_points_percentage_custom_senors_pm_only
                 )
                 LOGGER.debug("font_colour_pm25: %s", font_colour_pm25)
                 LOGGER.debug(
@@ -111,10 +100,7 @@ def loop_air_monitor_community(CZAS):
                     pm1_points_value_custom_senors_pm_only
                 )
 
-                LOGGER.debug(
-                    "pm1_points_value_custom_senors_pm_only: %s",
-                    pm1_points_value_custom_senors_pm_only,
-                )
+                LOGGER.debug("pm1_points_value_custom_senors_pm_only: %s", pm1_points_value_custom_senors_pm_only)
                 LOGGER.debug(
                     "returned_value_from_custom_sensors_pm1_custom_senors_pm_only: %s",
                     returned_value_from_custom_sensors_pm1_custom_senors_pm_only,
@@ -125,8 +111,7 @@ def loop_air_monitor_community(CZAS):
                     and pm25_points_value_custom_senors_pm_only != "Brak danych"
             ):
                 map_icon_colour = map_pins(
-                    pm10_points_percentage_custom_senors_pm_only,
-                    pm25_points_percentage_custom_senors_pm_only,
+                    pm10_points_percentage_custom_senors_pm_only, pm25_points_percentage_custom_senors_pm_only
                 )
                 icon = map_icon_colour[0]
                 icon_colour = map_icon_colour[1]
@@ -160,18 +145,10 @@ def loop_air_monitor_community(CZAS):
                     )
 
                     html_airmonitor_community = htmlmin.minify(
-                        html_airmonitor_community,
-                        remove_comments=True,
-                        remove_empty_space=True,
+                        html_airmonitor_community, remove_comments=True, remove_empty_space=True
                     )
 
-                    single_values = (
-                        lat,
-                        long,
-                        icon,
-                        icon_colour,
-                        html_airmonitor_community,
-                    )
+                    single_values = (lat, long, icon, icon_colour, html_airmonitor_community)
                     all_values.add(single_values)
             except (ValueError, UnboundLocalError):
                 raise
