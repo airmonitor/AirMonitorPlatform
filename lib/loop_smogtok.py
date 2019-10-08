@@ -1,12 +1,12 @@
 import os
 
 import htmlmin
-from lib.html_templates import HtmlTemplates
-from smogtok import all_data
 
 from lib.airmonitor_common_libs import logger_initialization
+from lib.html_templates import HtmlTemplates
 from lib.points_value import map_pins, pins, points_value
 from lib.query import query
+from smogtok import all_data
 
 LOGGER = logger_initialization()
 LOG_LEVEL = os.environ["LOG_LEVEL"]
@@ -27,19 +27,13 @@ def loop_smogtok(czas):
         smogtok_all_stations = all_data()
         LOGGER.debug("smogtok_all_stations %s", smogtok_all_stations)
 
-        result_smogtok_latitude = [
-            latitude["latitude"] for latitude in smogtok_all_stations
-        ]
+        result_smogtok_latitude = [latitude["latitude"] for latitude in smogtok_all_stations]
         LOGGER.debug("result_smogtok_latitude %s", result_smogtok_latitude)
 
-        result_smogtok_longitude = [
-            longitude["longitude"] for longitude in smogtok_all_stations
-        ]
+        result_smogtok_longitude = [longitude["longitude"] for longitude in smogtok_all_stations]
         LOGGER.debug("result_smogtok_longitude %s", result_smogtok_longitude)
 
-        merged_smogtok_ids_lat_long = list(
-            zip(result_smogtok_latitude, result_smogtok_longitude)
-        )
+        merged_smogtok_ids_lat_long = list(zip(result_smogtok_latitude, result_smogtok_longitude))
         LOGGER.debug("merged_smogtok_ids_lat_long %s", merged_smogtok_ids_lat_long)
 
         for row_smogtok in merged_smogtok_ids_lat_long:
@@ -55,13 +49,9 @@ def loop_smogtok(czas):
                 pm25_points_value_smogtok = points_value(pm25_points_value_smogtok)
                 LOGGER.debug("SmogTok PM25 %s", pm25_points_value_smogtok)
 
-                returned_value_from_custom_sensors_pm10_smogtok = float(
-                    pm10_points_value_smogtok
-                )
+                returned_value_from_custom_sensors_pm10_smogtok = float(pm10_points_value_smogtok)
                 pm10_points_percentage_smogtok = float(pm10_points_value_smogtok) * 2
-                returned_value_from_custom_sensors_pm25_smogtok = float(
-                    pm25_points_value_smogtok
-                )
+                returned_value_from_custom_sensors_pm25_smogtok = float(pm25_points_value_smogtok)
                 pm25_points_percentage_smogtok = float(pm25_points_value_smogtok) * 4
                 #
                 if (returned_value_from_custom_sensors_pm10_smogtok != 0) or (
@@ -69,22 +59,16 @@ def loop_smogtok(czas):
                 ):
                     font_colour_pm10 = pins(pm10_points_percentage_smogtok)
                     font_colour_pm25 = pins(pm25_points_percentage_smogtok)
-                    map_icon_colour = map_pins(
-                        pm10_points_percentage_smogtok, pm25_points_percentage_smogtok
-                    )
+                    map_icon_colour = map_pins(pm10_points_percentage_smogtok, pm25_points_percentage_smogtok)
                     icon = map_icon_colour[0]
                     icon_colour = map_icon_colour[1]
 
                     font_colour_pm10 = str(font_colour_pm10[0])
                     font_colour_pm25 = str(font_colour_pm25[0])
                     pm10_points_percentage = str(int(pm10_points_percentage_smogtok))
-                    pm10_points = str(
-                        int(returned_value_from_custom_sensors_pm10_smogtok)
-                    )
+                    pm10_points = str(int(returned_value_from_custom_sensors_pm10_smogtok))
                     pm25_points_percentage = str(int(pm25_points_percentage_smogtok))
-                    pm25_points = str(
-                        int(returned_value_from_custom_sensors_pm25_smogtok)
-                    )
+                    pm25_points = str(int(returned_value_from_custom_sensors_pm25_smogtok))
 
                     html_smogtok = HtmlTemplates.airmonitor_sensors_html_out(
                         CZAS=czas,
@@ -99,9 +83,7 @@ def loop_smogtok(czas):
                         particle_sensor="SMOGTOK",
                     )
 
-                    html_smogtok = htmlmin.minify(
-                        html_smogtok, remove_comments=True, remove_empty_space=True
-                    )
+                    html_smogtok = htmlmin.minify(html_smogtok, remove_comments=True, remove_empty_space=True)
 
                     single_values = (lat, long, icon, icon_colour, html_smogtok)
                     all_values.add(single_values)

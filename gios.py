@@ -19,7 +19,7 @@ LOG_LEVEL = os.environ["LOG_LEVEL"]
 def all_data():
     url = "http://api.gios.gov.pl/pjp-api/rest/station/findAll"
 
-    if url.lower().startswith('http'):
+    if url.lower().startswith("http"):
         gios = Request(url)
     else:
         raise ValueError from None
@@ -50,13 +50,13 @@ def gios(event, context):
     LOGGER.debug("gios_all_stations %s", gios_all_stations)
 
     try:
-        result_ids = [ids['id'] for ids in gios_all_stations]
+        result_ids = [ids["id"] for ids in gios_all_stations]
         LOGGER.debug("result_ids %s", result_ids)
 
-        result_latitude = [latitude['gegrLat'] for latitude in gios_all_stations]
+        result_latitude = [latitude["gegrLat"] for latitude in gios_all_stations]
         LOGGER.debug("result_latitude %s", result_latitude)
 
-        result_longitude = [longitude['gegrLon'] for longitude in gios_all_stations]
+        result_longitude = [longitude["gegrLon"] for longitude in gios_all_stations]
         LOGGER.debug("result_longitude %s", result_longitude)
 
     except (KeyError, ValueError):
@@ -65,7 +65,7 @@ def gios(event, context):
     merged_ids_lat_long = list(zip(result_ids, result_latitude, result_longitude))
 
     for values in merged_ids_lat_long:
-        sensor_url = Request('http://api.gios.gov.pl/pjp-api/rest/station/sensors/' + str(values[0]))
+        sensor_url = Request("http://api.gios.gov.pl/pjp-api/rest/station/sensors/" + str(values[0]))
         gios_sensor_data = urllib.request.urlopen(sensor_url, timeout=60)
 
         try:
@@ -75,13 +75,13 @@ def gios(event, context):
         except (ValueError, IndexError, KeyError, TypeError):
             gios_sensor_data = 2
 
-        for i in (range(10)):
+        for i in range(10):
             LOGGER.debug("Trying %s", 1)
 
             try:
 
-                param_formula = str(gios_sensor_data[i]['param']['paramFormula'])
-                sensor_id = gios_sensor_data[i]['id']
+                param_formula = str(gios_sensor_data[i]["param"]["paramFormula"])
+                sensor_id = gios_sensor_data[i]["id"]
                 if param_formula == str("PM10"):
                     pm10_count += 1
                     LOGGER.debug("Param formula %s", param_formula)
@@ -91,7 +91,7 @@ def gios(event, context):
                     LOGGER.debug("Param station_sensor_data %s", station_sensor_data)
 
                     try:
-                        pm10_value = station_sensor_data['values'][0]['value']
+                        pm10_value = station_sensor_data["values"][0]["value"]
                         pm10_value = float(pm10_value)
                         LOGGER.debug("PM10_value %s", pm10_value)
 
@@ -115,7 +115,7 @@ def gios(event, context):
                     LOGGER.debug("Param station_sensor_data %s", station_sensor_data)
 
                     try:
-                        pm25_value = station_sensor_data['values'][0]['value']
+                        pm25_value = station_sensor_data["values"][0]["value"]
                         pm25_value = float(pm25_value)
                         LOGGER.debug("pm25_value %s", pm25_value)
 
@@ -132,12 +132,14 @@ def gios(event, context):
             except:
                 continue
 
-    print(f"PM25 missing count {pm25_missing_count}\n"
-          f"PM25 total count {pm25_count}\n"
-          f"PM25 sum of valid measurements {pm25_count - pm25_missing_count}\n"
-          f"PM10 missing count {pm10_missing_count}\n"
-          f"PM10 total count {pm10_count}\n"
-          f"PM10 sum of valid measurements {pm10_count - pm10_missing_count}\n")
+    print(
+        f"PM25 missing count {pm25_missing_count}\n"
+        f"PM25 total count {pm25_count}\n"
+        f"PM25 sum of valid measurements {pm25_count - pm25_missing_count}\n"
+        f"PM10 missing count {pm10_missing_count}\n"
+        f"PM10 total count {pm10_count}\n"
+        f"PM10 sum of valid measurements {pm10_count - pm10_missing_count}\n"
+    )
 
     merged_ids_lat_long_pm10 = list(zip(lat_pm10, long_pm10, pm10))
     LOGGER.debug("merged_ids_lat_long_pm10 %s ", merged_ids_lat_long_pm10)
@@ -146,22 +148,12 @@ def gios(event, context):
     LOGGER.debug("merged_ids_lat_long_pm25 %s ", merged_ids_lat_long_pm25)
 
     for values in merged_ids_lat_long_pm10:
-        data = {
-            "lat": str(values[0]),
-            "long": str(values[1]),
-            "pm10": float('%.2f' % values[2]),
-            "sensor": "WIOS"
-        }
+        data = {"lat": str(values[0]), "long": str(values[1]), "pm10": float("%.2f" % values[2]), "sensor": "WIOS"}
         LOGGER.debug("data %s", data)
         final_list_of_measurements_in_dictionary.append(data)
 
     for values in merged_ids_lat_long_pm25:
-        data = {
-            "lat": str(values[0]),
-            "long": str(values[1]),
-            "pm25": float('%.2f' % values[2]),
-            "sensor": "WIOS"
-        }
+        data = {"lat": str(values[0]), "long": str(values[1]), "pm25": float("%.2f" % values[2]), "sensor": "WIOS"}
         LOGGER.debug("data %s", data)
         final_list_of_measurements_in_dictionary.append(data)
 
@@ -170,4 +162,4 @@ def gios(event, context):
 
 
 if __name__ == "__main__":
-    gios('', '')
+    gios("", "")

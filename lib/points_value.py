@@ -1,13 +1,14 @@
 # coding=utf-8
 
+
 def points_value(points_value):
     try:
         points_value = str(points_value)
         points_value = points_value.split("last", 1)[1]
-        points_value = points_value.split(':')[1]
-        points_value = points_value.split('}')[0]
+        points_value = points_value.split(":")[1]
+        points_value = points_value.split("}")[0]
         points_value = float(points_value)
-        points_value = ('%.2f' % points_value)
+        points_value = "%.2f" % points_value
         return points_value
     except (ValueError, IndexError):
         return "Brak danych"

@@ -35,9 +35,7 @@ def loop_last(event, context):
     tz = pytz.timezone("Europe/Warsaw")
     czas = datetime.datetime.now(tz).strftime("%H:%M")
 
-    mapa = folium.Map(
-        location=[52.40729, 16.93276], tiles=TILES, zoom_start=7, attr=ATTR
-    )
+    mapa = folium.Map(location=[52.40729, 16.93276], tiles=TILES, zoom_start=7, attr=ATTR)
     marker_cluster = MarkerCluster().add_to(mapa)
     measure_feature = MeasureControl()
     measure_feature.add_to(mapa)
@@ -49,7 +47,7 @@ def loop_last(event, context):
 
     """ Airly """
     try:
-        for values in loop_airly(czas=czas):
+        for values in loop_airly(czas=czas, lat=52.4, lng=16.93, max_distance=30):
             lat, long, icon, icon_colour, html_airly = values
 
             iframe = branca.element.IFrame(html=html_airly, width=430, height=330)
@@ -57,9 +55,7 @@ def loop_last(event, context):
             popup = folium.Popup(iframe, max_width=500)
 
             folium.Marker(
-                [float(lat), float(long)],
-                icon=folium.Icon(color=icon_colour, icon=icon),
-                popup=popup,
+                [float(lat), float(long)], icon=folium.Icon(color=icon_colour, icon=icon), popup=popup
             ).add_to(marker_cluster)
 
             folium.Circle(
@@ -88,9 +84,7 @@ def loop_last(event, context):
             popup = folium.Popup(iframe, max_width=500)
 
             folium.Marker(
-                [float(lat), float(long)],
-                icon=folium.Icon(color=icon_colour, icon=icon),
-                popup=popup,
+                [float(lat), float(long)], icon=folium.Icon(color=icon_colour, icon=icon), popup=popup
             ).add_to(marker_cluster)
 
             folium.Circle(
@@ -113,15 +107,11 @@ def loop_last(event, context):
         for values in loop_gios(CZAS=czas):
             lat, long, icon, icon_colour, html_gios = values
 
-            iframe_pm10_pm25 = branca.element.IFrame(
-                html=html_gios, width=430, height=330
-            )
+            iframe_pm10_pm25 = branca.element.IFrame(html=html_gios, width=430, height=330)
             popup_pm10_pm25 = folium.Popup(iframe_pm10_pm25, max_width=500)
 
             folium.Marker(
-                [float(lat), float(long)],
-                icon=folium.Icon(color=icon_colour, icon=icon),
-                popup=popup_pm10_pm25,
+                [float(lat), float(long)], icon=folium.Icon(color=icon_colour, icon=icon), popup=popup_pm10_pm25
             ).add_to(marker_cluster)
 
             folium.Circle(
@@ -146,9 +136,7 @@ def loop_last(event, context):
             iframe = branca.element.IFrame(html=html_looko2, width=430, height=330)
             popup = folium.Popup(iframe, max_width=500)
             folium.Marker(
-                [float(lat), float(long)],
-                icon=folium.Icon(color=icon_colour, icon=icon),
-                popup=popup,
+                [float(lat), float(long)], icon=folium.Icon(color=icon_colour, icon=icon), popup=popup
             ).add_to(marker_cluster)
             folium.Circle(
                 location=[float(lat), float(long)],
@@ -169,16 +157,12 @@ def loop_last(event, context):
         for values in loop_air_monitor_community(CZAS=czas):
             lat, long, icon, icon_colour, html_airmonitor_community = values
 
-            iframe = branca.element.IFrame(
-                html=html_airmonitor_community, width=430, height=370
-            )
+            iframe = branca.element.IFrame(html=html_airmonitor_community, width=430, height=370)
 
             popup = folium.Popup(iframe, max_width=500)
 
             folium.Marker(
-                [float(lat), float(long)],
-                icon=folium.Icon(color=icon_colour, icon=icon),
-                popup=popup,
+                [float(lat), float(long)], icon=folium.Icon(color=icon_colour, icon=icon), popup=popup
             ).add_to(marker_cluster)
 
             folium.Circle(
@@ -201,9 +185,7 @@ def loop_last(event, context):
             iframe = branca.element.IFrame(html=html_smogtok, width=430, height=330)
             popup = folium.Popup(iframe, max_width=500)
             folium.Marker(
-                [float(lat), float(long)],
-                icon=folium.Icon(color=icon_colour, icon=icon),
-                popup=popup,
+                [float(lat), float(long)], icon=folium.Icon(color=icon_colour, icon=icon), popup=popup
             ).add_to(marker_cluster)
             folium.Circle(
                 location=[float(lat), float(long)],

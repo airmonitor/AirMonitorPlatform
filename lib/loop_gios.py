@@ -2,12 +2,12 @@
 
 import os
 
-from gios import all_data
 import htmlmin
-from lib.html_templates import HtmlTemplates
 import urllib3
 
+from gios import all_data
 from lib.airmonitor_common_libs import logger_initialization
+from lib.html_templates import HtmlTemplates
 from lib.points_value import map_pins, pins, points_value
 from lib.query import query
 
@@ -90,9 +90,7 @@ def loop_gios(CZAS):
                 particle_sensor="WIOS",
             )
 
-            html_gios = htmlmin.minify(
-                html_gios_pm10, remove_comments=True, remove_empty_space=True
-            )
+            html_gios = htmlmin.minify(html_gios_pm10, remove_comments=True, remove_empty_space=True)
 
             single_values = (lat, long, icon, icon_colour, html_gios)
             all_values.add(single_values)
@@ -114,9 +112,7 @@ def loop_gios(CZAS):
             font_colour_icon_pm25 = pins(returned_value_pm10_pm25[3])
             LOGGER.debug("font_colour_icon_pm25 %s", font_colour_icon_pm25)
 
-            map_icon_colour = map_pins(
-                returned_value_pm10_pm25[1], returned_value_pm10_pm25[3]
-            )
+            map_icon_colour = map_pins(returned_value_pm10_pm25[1], returned_value_pm10_pm25[3])
             LOGGER.debug("map_icon_colour %s", map_icon_colour)
 
             icon = map_icon_colour[0]
@@ -138,9 +134,7 @@ def loop_gios(CZAS):
                 particle_sensor="WIOS",
             )
 
-            html_gios = htmlmin.minify(
-                html_gios_pm10_pm25, remove_comments=True, remove_empty_space=True
-            )
+            html_gios = htmlmin.minify(html_gios_pm10_pm25, remove_comments=True, remove_empty_space=True)
             single_values = (lat, long, icon, icon_colour, html_gios)
             all_values.add(single_values)
 

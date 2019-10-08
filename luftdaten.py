@@ -15,9 +15,7 @@ LOGGER = logger_initialization()
 LOG_LEVEL = os.environ["LOG_LEVEL"]
 
 
-def _requests_retry_session(
-        retries=3, back_off_factor=3, status_force_list=(500, 502, 504), session=None
-):
+def _requests_retry_session(retries=3, back_off_factor=3, status_force_list=(500, 502, 504), session=None):
     """
     Function will help with exponential back-off when calling BI API
     :param retries: int
@@ -28,11 +26,7 @@ def _requests_retry_session(
     """
     session = session or requests.Session()
     retry = Retry(
-        total=retries,
-        read=retries,
-        connect=retries,
-        backoff_factor=back_off_factor,
-        status_forcelist=status_force_list,
+        total=retries, read=retries, connect=retries, backoff_factor=back_off_factor, status_forcelist=status_force_list
     )
     adapter = HTTPAdapter(max_retries=retry)
     session.mount("http://", adapter)
@@ -75,33 +69,20 @@ def luftdaten(event, context):
             sensor_long = data["location"]["longitude"]
             sensor_long_list.append(sensor_long)
 
-            LOGGER.debug(
-                "Sensor name: %s, Lat: %s, Long: %s",
-                sensor_name,
-                sensor_lat,
-                sensor_long,
-            )
+            LOGGER.debug("Sensor name: %s, Lat: %s, Long: %s", sensor_name, sensor_lat, sensor_long)
 
             for _ in data["sensordatavalues"]:
                 value_type = _.get("value_type")
                 if value_type == "P1":
                     pm10_value = _.get("value")
                     LOGGER.debug(
-                        "PM10: %s, Sensor name: %s, Lat: %s, Long: %s",
-                        pm10_value,
-                        sensor_name,
-                        sensor_lat,
-                        sensor_long,
+                        "PM10: %s, Sensor name: %s, Lat: %s, Long: %s", pm10_value, sensor_name, sensor_lat, sensor_long
                     )
 
                 elif value_type == "P2":
                     pm25_value = _.get("value")
                     LOGGER.debug(
-                        "PM25: %s, Sensor name: %s, Lat: %s, Long: %s",
-                        pm25_value,
-                        sensor_name,
-                        sensor_lat,
-                        sensor_long,
+                        "PM25: %s, Sensor name: %s, Lat: %s, Long: %s", pm25_value, sensor_name, sensor_lat, sensor_long
                     )
 
             if sensor_name == "SDS011":
@@ -119,10 +100,7 @@ def luftdaten(event, context):
     except urllib.error.HTTPError as e:
         LOGGER.critical("luftdaten returned %s", e)
 
-    LOGGER.debug(
-        "final_list_of_measurements_in_dictionary %s",
-        final_list_of_measurements_in_dictionary,
-    )
+    LOGGER.debug("final_list_of_measurements_in_dictionary %s", final_list_of_measurements_in_dictionary)
 
     _send_data_to_api(final_list_of_measurements_in_dictionary)
 
