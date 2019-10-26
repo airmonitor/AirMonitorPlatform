@@ -25,17 +25,14 @@ def loop_luftdaten(CZAS):
 
             if sensor_name == "SDS011":
                 sensor_lat = data["location"]["latitude"]
-                while sensor_lat[-1] == "0":
-                    sensor_lat = sensor_lat[:-1]
+                LOGGER.debug("luftdaten lat %s", sensor_lat)
                 sensor_lat_list.append(sensor_lat)
 
                 sensor_long = data["location"]["longitude"]
-                while sensor_long[-1] == "0":
-                    sensor_long = sensor_long[:-1]
+                LOGGER.debug("luftdaten long %s", sensor_long)
                 sensor_long_list.append(sensor_long)
 
         merged_ids_lat_long_luftdaten = list(zip(sensor_lat_list, sensor_long_list))
-
         LOGGER.debug("luftdaten merged lat, long %s", merged_ids_lat_long_luftdaten)
 
         for row_luftdaten in merged_ids_lat_long_luftdaten:
@@ -74,12 +71,14 @@ def loop_luftdaten(CZAS):
 
                     font_colour_pm10 = pins(pm10_points_percentage_luftdaten)
                     font_colour_pm25 = pins(pm25_points_percentage_luftdaten)
-                    LOGGER.debug("font_colour_pm10: %s, font_colour_pm25 %s", font_colour_pm10, font_colour_pm25)
+                    LOGGER.debug(
+                        "luftdaten font_colour_pm10: %s, font_colour_pm25 %s", font_colour_pm10, font_colour_pm25
+                    )
 
                     map_icon_colour = map_pins(pm10_points_percentage_luftdaten, pm25_points_percentage_luftdaten)
                     icon = map_icon_colour[0]
                     icon_colour = map_icon_colour[1]
-                    LOGGER.debug("icon: %s, icon_colour %s", icon, icon_colour)
+                    LOGGER.debug("luftdaten icon: %s, icon_colour %s", icon, icon_colour)
 
                     font_colour_pm10 = str(font_colour_pm10[0])
                     font_colour_pm25 = str(font_colour_pm25[0])
@@ -104,8 +103,10 @@ def loop_luftdaten(CZAS):
                         particle_sensor="SDS011",
                     )
                     html_luftdaten = htmlmin.minify(html_luftdaten, remove_comments=True, remove_empty_space=True)
+                    LOGGER.debug("luftdaten html_luftdaten %s", html_luftdaten)
 
                     single_values = (lat, long, icon, icon_colour, html_luftdaten)
+                    LOGGER.debug("luftdaten single_values %s", single_values)
 
                     all_values.add(single_values)
 
@@ -113,6 +114,8 @@ def loop_luftdaten(CZAS):
                 pass
     except:
         pass
+
+    LOGGER.debug("luftdaten all_values %s", all_values)
     return all_values
 
 

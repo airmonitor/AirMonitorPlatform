@@ -5,8 +5,7 @@ import os
 import htmlmin
 import urllib3
 
-from lib.airmonitor_common_libs import (_data_from_google_docs,
-                                        logger_initialization)
+from lib.airmonitor_common_libs import _data_from_google_docs, logger_initialization
 from lib.html_templates import HtmlTemplates
 from lib.points_value import map_pins, pins, points_value
 from lib.query import query
