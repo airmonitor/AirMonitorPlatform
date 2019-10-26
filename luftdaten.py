@@ -15,8 +15,7 @@ def all_data():
     api_content = get_content(url="https://api.luftdaten.info/v1/filter/country=PL")
     luftdaten_all_stations = json.loads(api_content)
     LOGGER.debug("Luftdaten all stations %s", luftdaten_all_stations)
-    for data in luftdaten_all_stations:
-        yield data
+    return luftdaten_all_stations
 
 
 def luftdaten(event, context):
