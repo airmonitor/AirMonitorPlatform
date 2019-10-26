@@ -1,50 +1,19 @@
 import json
 import os
 import urllib
-from urllib.request import Request
 
-import requests
-from requests.adapters import HTTPAdapter
 import urllib3
-from urllib3.util import Retry
 
-from lib.airmonitor_common_libs import _send_data_to_api, logger_initialization
+from lib.airmonitor_common_libs import _send_data_to_api, get_content, logger_initialization
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 LOGGER = logger_initialization()
 LOG_LEVEL = os.environ["LOG_LEVEL"]
 
 
-def _requests_retry_session(retries=3, back_off_factor=3, status_force_list=(500, 502, 504), session=None):
-    """
-    Function will help with exponential back-off when calling BI API
-    :param retries: int
-    :param back_off_factor: int
-    :param status_force_list: list http codes returned by api
-    :param session: None
-    :return: session
-    """
-    session = session or requests.Session()
-    retry = Retry(
-        total=retries, read=retries, connect=retries, backoff_factor=back_off_factor, status_forcelist=status_force_list
-    )
-    adapter = HTTPAdapter(max_retries=retry)
-    session.mount("http://", adapter)
-    session.mount("https://", adapter)
-    return session
-
-
 def all_data():
-    url = "http://api.luftdaten.info/v1/filter/country=PL"
-
-    if url.lower().startswith("http"):
-        luftdaten = Request(url)
-    else:
-        raise ValueError from None
-
-    with urllib.request.urlopen(luftdaten, timeout=60) as resp:
-        luftdaten_all_stations = json.loads(resp.read())
-
+    api_content = get_content(url="https://api.luftdaten.info/v1/filter/country=PL")
+    luftdaten_all_stations = json.loads(api_content)
     LOGGER.debug("Luftdaten all stations %s", luftdaten_all_stations)
     for data in luftdaten_all_stations:
         yield data
