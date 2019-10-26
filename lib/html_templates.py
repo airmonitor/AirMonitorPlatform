@@ -72,11 +72,11 @@ class HtmlTemplates:
             tvoc_points_value_unit = "ppb"
             tvoc_html = (
                     """<tr>
-                                    <td>TVOC<br>
-                                    </td>
-                                    <td>
-                                    <b>
-                                    <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=16&fullscreen&var-latitude="""
+                                        <td>TVOC<br>
+                                        </td>
+                                        <td>
+                                        <b>
+                                        <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=16&fullscreen&var-latitude="""
                     + str(lat)
                     + """&var-longitude="""
                     + str(long)
@@ -101,11 +101,11 @@ class HtmlTemplates:
             co2_points_value_unit = "ppm"
             co2_html = (
                     """<tr>
-                                <td>CO2<br>
-                                </td>
-                                <td>
-                                <b>
-                                <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=15&fullscreen&var-latitude="""
+                                    <td>CO2<br>
+                                    </td>
+                                    <td>
+                                    <b>
+                                    <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=15&fullscreen&var-latitude="""
                     + str(lat)
                     + """&var-longitude="""
                     + str(long)
@@ -131,11 +131,11 @@ class HtmlTemplates:
             pressure_points_value_unit = "hPa"
             pressure_html = (
                     """<tr>
-                                <td>Ciśnienie<br>
-                                </td>
-                                <td>
-                                <b>
-                                <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=7&fullscreen&var-latitude="""
+                                    <td>Ciśnienie<br>
+                                    </td>
+                                    <td>
+                                    <b>
+                                    <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=7&fullscreen&var-latitude="""
                     + str(lat)
                     + """&var-longitude="""
                     + str(long)
@@ -161,10 +161,10 @@ class HtmlTemplates:
             humidity_points_value_unit = "%"
             humidity_html = (
                     """<tr>
-                                <td>Wilgotność</td>
-                                <td>
-                                <b>
-                                <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=5&fullscreen&var-latitude="""
+                                    <td>Wilgotność</td>
+                                    <td>
+                                    <b>
+                                    <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=5&fullscreen&var-latitude="""
                     + str(lat)
                     + """&var-longitude="""
                     + str(long)
@@ -190,11 +190,11 @@ class HtmlTemplates:
             temperature_points_value_unit = "°C"
             temperature_html = (
                     """<tr>
-                                <td>Temperatura<br>
-                                </td>
-                                <td>
-                                <b>
-                                <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=5&fullscreen&var-latitude="""
+                                    <td>Temperatura<br>
+                                    </td>
+                                    <td>
+                                    <b>
+                                    <a target="_blank" href="https://metrics.airmonitor.pl/dashboard/db/airmonitor?orgId=1&panelId=5&fullscreen&var-latitude="""
                     + str(lat)
                     + """&var-longitude="""
                     + str(long)
@@ -221,7 +221,7 @@ class HtmlTemplates:
             pm25_points_percentage_unit = "µg/m<sup>3</sup>"
             pm25_html = (
                     """<tr>
-                                <td><font color="""
+                                    <td><font color="""
                     + str(font_colour_pm25)
                     + """>
                         PM2,5
@@ -265,8 +265,8 @@ class HtmlTemplates:
             pm10_points_percentage_unit = "µg/m<sup>3</sup>"
             pm10_html = (
                     """<tr>
-                                <td>
-                                <font color="""
+                                    <td>
+                                    <font color="""
                     + str(font_colour_pm10)
                     + """>
                         PM10
@@ -312,8 +312,8 @@ class HtmlTemplates:
             pm1_points_percentage_unit = "µg/m<sup>3</sup>"
             pm1_html = (
                     """<tr>
-                                <td>
-                                <font color="""
+                                    <td>
+                                    <font color="""
                     + str(font_colour_pm1)
                     + """>
                         PM1
@@ -354,26 +354,26 @@ class HtmlTemplates:
 
         html = (
                 """
-                       <!doctype html>
-                       <html>
-                       <style>
-                       table {
-                       font-family: arial, sans-serif;
-                       border-collapse: collapse;
-                       width: 100%;
-                       }
-                       td, th {
-                       border: 1px solid #dddddd;
-                       text-align: left;
-                       padding: 8px;
-                       }
-                       tr:nth-child(even) {
-                       background-color: #dddddd;
-                       }
-                       </style>
-                       <p>
-                       <font face="arial">
-                       <b>Czas pomiaru  """
+                           <!doctype html>
+                           <html>
+                           <style>
+                           table {
+                           font-family: arial, sans-serif;
+                           border-collapse: collapse;
+                           width: 100%;
+                           }
+                           td, th {
+                           border: 1px solid #dddddd;
+                           text-align: left;
+                           padding: 8px;
+                           }
+                           tr:nth-child(even) {
+                           background-color: #dddddd;
+                           }
+                           </style>
+                           <p>
+                           <font face="arial">
+                           <b>Czas pomiaru  """
                 + str(CZAS)
                 + """</b>
                </font>

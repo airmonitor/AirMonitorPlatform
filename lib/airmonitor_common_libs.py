@@ -67,3 +67,15 @@ def _send_data_to_api(data):
     resp = requests.post(url, timeout=10, data=json.dumps(data), headers={"Content-Type": "application/json"})
 
     return resp.status_code
+
+
+def get_content(url):
+    session = requests.Session()
+    session.mount("https://", HTTPAdapter(max_retries=5))
+    try:
+        result = session.get(url=url)
+        if result.status_code == 200:
+            return result.content
+    except Exception as error:
+        LOGGER.info("get_content error %s", error)
+        return None
