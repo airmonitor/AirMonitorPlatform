@@ -47,7 +47,12 @@ def loop_last(event, context):
 
     """ Airly """
     try:
-        for values in loop_airly(czas=czas, lat=52.4, lng=16.93, max_distance=30):
+        for values in loop_airly(
+                czas=czas,
+                lat=float(os.environ["AIRLY_LAT"]),
+                lng=float(os.environ["AIRLY_LONG"]),
+                max_distance_km=int(os.environ["AIRLY_MAX_DISTANCE"]),
+        ):
             lat, long, icon, icon_colour, html_airly = values
 
             iframe = branca.element.IFrame(html=html_airly, width=430, height=330)

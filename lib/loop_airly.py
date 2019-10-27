@@ -17,12 +17,12 @@ LOG_LEVEL = os.environ["LOG_LEVEL"]
 AIRLY_TOKEN = os.environ["AIRLY_TOKEN"]
 
 
-def loop_airly(czas, lat, lng, max_distance):
+def loop_airly(czas, lat, lng, max_distance_km):
 
     all_values = set()
 
     try:
-        airly_all_stations = get_stations(lat=lat, lng=lng, max_distance_km=max_distance)
+        airly_all_stations = get_stations(lat=lat, lng=lng, max_distance_km=max_distance_km)
         LOGGER.debug("airly_all_stations %s", airly_all_stations)
 
         for station in airly_all_stations:
@@ -106,4 +106,11 @@ if __name__ == "__main__":
 
     TZ = pytz.timezone("Europe/Warsaw")
     CZAS = datetime.datetime.now(TZ).strftime("%H:%M")
-    print(loop_airly(czas=CZAS, lat=52.4, lng=16.93, max_distance=30))
+    print(
+        loop_airly(
+            czas=CZAS,
+            lat=int(os.environ["AIRLY_LAT"]),
+            lng=int(os.environ["AIRLY_LONG"]),
+            max_distance_km=int(os.environ["AIRLY_MAX_DISTANCE"]),
+        )
+    )

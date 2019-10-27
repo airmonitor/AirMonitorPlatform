@@ -67,7 +67,11 @@ def get_measurements(stations_list):
 
 
 if __name__ == "__main__":
-    all_stations = get_stations(lat=52.4, lng=16.93, max_distance_km=30)
+    all_stations = get_stations(
+        lat=float(os.environ["AIRLY_LAT"]),
+        lng=float(os.environ["AIRLY_LONG"]),
+        max_distance_km=int(os.environ["AIRLY_MAX_DISTANCE"])
+    )
     LOGGER.info("all_stations %s", all_stations)
     get_measurements(stations_list=all_stations)
     airmonitor_api = _send_data_to_api(MEASUREMENT_LIST)
