@@ -6,35 +6,24 @@ Module to import data from loo02.pl, parser json and send it back to airmonitor 
 import json
 import os
 import time
-import urllib
-from urllib.request import Request
 
 import urllib3
 
-from lib.airmonitor_common_libs import _send_data_to_api, logger_initialization
+from lib.airmonitor_common_libs import _send_data_to_api, get_content, logger_initialization
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+LOOK_API = os.environ["LOOK_API"]
 LOOK_TOKEN = int(os.environ["LOOK_TOKEN"])
 
-LOGGER = logger_initialization()
 LOG_LEVEL = os.environ["LOG_LEVEL"]
-LOOK_API = os.environ["LOOK_API"]
+LOGGER = logger_initialization()
 
 
 def all_data():
-    url = f"{LOOK_API}{LOOK_TOKEN}"
-
-    if url.lower().startswith("http"):
-        looko2 = Request(url)
-    else:
-        raise ValueError from None
-
-    try:
-        resp = urllib.request.urlopen(looko2, timeout=60)
-        looko2_all_stations = json.loads(resp.read())
-    except ValueError:
-        looko2_all_stations = None
-
+    api_content = get_content(url=f"{LOOK_API}{LOOK_TOKEN}")
+    looko2_all_stations = json.loads(api_content)
+    LOGGER.debug("LOOKO2 all stations %s", looko2_all_stations)
     return looko2_all_stations
 
 
@@ -65,20 +54,14 @@ def looko2(event, context):
 
     LOGGER.debug("merged_ids_lat_long %s", merged_ids_lat_long)
 
-    lat = []
-    long = []
-    value_pm01 = []
-    value_pm25 = []
-    value_pm10 = []
-
     for values in merged_ids_lat_long:
         LOGGER.debug("values %s", values)
 
-        sensor_url = Request(f"http://api.looko2.com/?method=GetLOOKO&id={values[0]}&token={LOOK_TOKEN}")
-
+        looko2_sensor_data = get_content(
+            url=f"http://api.looko2.com/?method=GetLOOKO&id={values[0]}&token={LOOK_TOKEN}"
+        )
         try:
-            looko2_sensor_data = urllib.request.urlopen(sensor_url)
-            looko2_sensor_data = json.loads(looko2_sensor_data.read())
+            looko2_sensor_data = json.loads(looko2_sensor_data)
         except:
             looko2_sensor_data = 0
 
@@ -106,29 +89,21 @@ def looko2(event, context):
             except (ValueError, KeyError, IndexError):
                 looko2_sensor_data_pm10 = 0
 
-            lat.append(values[1])
-            long.append(values[2])
-            value_pm01.append(float(looko2_sensor_data_pm1))
-            value_pm25.append(float(looko2_sensor_data_pm25))
-            value_pm10.append(float(looko2_sensor_data_pm10))
+            data = {
+                "lat": str(values[1]),
+                "long": str(values[2]),
+                "pm1": looko2_sensor_data_pm1,
+                "pm25": looko2_sensor_data_pm25,
+                "pm10": looko2_sensor_data_pm10,
+                "sensor": "looko2",
+            }
 
-    all_entries_for_json_upload = list(zip(lat, long, value_pm25, value_pm10, value_pm01))
+            final_list_of_measurements_in_dictionary.append(data)
 
-    LOGGER.debug("all_entries_for_json_upload  %s", all_entries_for_json_upload)
-
-    for values in all_entries_for_json_upload:
-        data = {
-            "lat": str(values[0]),
-            "long": str(values[1]),
-            "pm1": str(float("%.2f" % values[4])),
-            "pm25": str(float("%.2f" % values[2])),
-            "pm10": str(float("%.2f" % values[3])),
-            "sensor": "looko2",
-        }
-
-        final_list_of_measurements_in_dictionary.append(data)
+    LOGGER.debug("final_list_of_measurements_in_dictionary  %s", final_list_of_measurements_in_dictionary)
 
     _send_data_to_api(final_list_of_measurements_in_dictionary)
+    return final_list_of_measurements_in_dictionary
 
 
 if __name__ == "__main__":
