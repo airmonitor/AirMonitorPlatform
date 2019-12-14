@@ -73,7 +73,7 @@ def get_content(url):
     session = requests.Session()
     session.mount("https://", HTTPAdapter(max_retries=5))
     try:
-        result = session.get(url=url)
+        result = session.get(url=url, timeout=5)
         if result.status_code == 200:
             return result.content
     except Exception as error:
