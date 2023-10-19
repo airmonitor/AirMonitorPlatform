@@ -5,7 +5,7 @@ influxdb==5.2.2
 oauth2client
 paho-mqtt==1.4.0
 requests==2.21.0
-urllib3==1.25.9
+urllib3==1.26.18
 htmlmin
 pytz
 flake8
